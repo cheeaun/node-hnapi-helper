@@ -1,0 +1,23 @@
+{
+  "name": "node-hnapi-helper",
+  "version": "0.1.0",
+  "description": "Helper for node-hnapi",
+  "dependencies": {
+    "firebase": "~2.4.0",
+    "hapi": "~12.1.0",
+    "lodash": "~4.1.0",
+    "memcached": "~2.2.1",
+    "moment": "~2.11.1",
+    "nconf": "~0.8.2"
+  },
+  "scripts": {
+    "dev": "nodemon server.js",
+    "debug": "node-debug server.js"
+  },
+  "author": "Lim Chee Aun",
+  "license": "ISC",
+  "devDependencies": {
+    "node-inspector": "~0.12.5",
+    "nodemon": "~1.8.1"
+  }
+}

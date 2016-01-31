@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Test HN API</title>
+<style>body{ font-family: sans-serif; }</style>
+<table id="output"></table>
+<ul id="comments"></ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.1.0/lodash.min.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
+<script>
+var $output = document.getElementById('output');
+var $comments = document.getElementById('comments');
+var hn = new Firebase('https://hacker-news.firebaseio.com/v0');
+var items = {};
+var itemRefs = {};
+var topStories = [];
+
+var handleCollection = function(itemIds, prevItemIds){
+  var added = _.difference(itemIds, prevItemIds);
+  var removed = _.difference(prevItemIds, itemIds);
+  added.forEach(addItem);
+  removed.forEach(removeItem);
+};
+
+var handleItem = function(snapshot){
+  var item = snapshot.val();
+  if (!item || !item.id) return;
+  var id = item.id;
+  var prevItem = items[id];
+  items[id] = item;
+  if (item.kids){
+    var prevKids = prevItem && prevItem.kids || [];
+    handleCollection(item.kids, prevKids);
+  }
+};
+
+var addItem = function(id){
+  if (itemRefs[id]) return;
+  console.log('Added: ' + id);
+  var itemFirebase = hn.child('/item/' + id);
+  itemFirebase.on('value', handleItem);
+  itemRefs[id] = itemFirebase;
+};
+
+var removeItem = function(id){
+  var itemFirebase = itemRefs[id];
+  if (!itemFirebase) return;
+  console.log('Removed: ' + id);
+  itemFirebase.off('value', handleItem);
+  delete itemRefs[id];
+  delete items[id];
+};
+
+var expandItem = function(id){
+  var item = items[id];
+  if (!item || item.dead) return;
+  if (item.parts){
+    item._parts = item.parts.map(expandItem).filter(Boolean);
+  }
+  if (!item.kids){
+    return item.deleted ? null : item;
+  }
+  item._kids = item.kids.map(expandItem).filter(Boolean);
+  return item;
+};
+
+var topStoriesRef = hn.child('/topstories').limitToFirst(10);
+topStoriesRef.on('value', function(snapshot){
+  var stories = snapshot.val();
+  handleCollection(stories, topStories);
+  topStories = stories;
+});
+
+var renderComment = function(comment){
+  var html = '<li>' + (comment.text || comment.title || (comment.deleted ? 'deleted' : ''));
+  if (comment._kids){
+    html += '<ul>' + comment._kids.map(renderComment).join('') + '</ul>';
+  }
+  html += '</li>';
+  return html;
+};
+
+setInterval(function(){
+  var noItem = false;
+  var data = topStories.map(function(id){
+    var item = items[id];
+    if (!item) noItem = true;
+    return items[id];
+  });
+
+  if (!noItem) {
+    $output.innerHTML = data.map(function(d, i){
+      return '<tr><td>' + (i+1) + '</td><td>' + d.id + '</td><td>' + d.score + '</td><td>' + (d.descendants || '') + '</td><td>' + d.title + '</td></tr>';
+    }).join('');
+  }
+
+  if (topStories[0]){
+    $comments.innerHTML = renderComment(expandItem(topStories[0]));
+  }
+}, 1000);
+</script>
