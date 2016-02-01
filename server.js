@@ -94,19 +94,19 @@ const expiry = nconf.get('cache:expiry');
 function cacheTime(){
   const news = hn.news();
   if (news.length) memcached.set('news', news, expiry, function(){
-    console.log('Cache news');
+    console.log((new Date().toISOString()) + ': Cache news');
   });
 
   const news2 = hn.news2();
   if (news2.length) memcached.set('news2', news2, expiry, function(){
-    console.log('Cache news2');
+    console.log((new Date().toISOString()) + ': Cache news2');
   });
 
   const items = hn.items();
   if (items.length) items.forEach(function(item){
     const id = item.id;
     if (id) memcached.set('post' + id, item, expiry, function(){
-      console.log('Cache item ' + id);
+      console.log((new Date().toISOString()) + ': Cache item ' + id);
     });
   });
 
