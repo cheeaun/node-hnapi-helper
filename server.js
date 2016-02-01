@@ -112,6 +112,10 @@ function cacheTime(){
     });
   });
 
-  setTimeout(cacheTime, interval);
+  if (!news.length || !news2.length || !items.length){
+    setTimeout(cacheTime, 5000); // If something is wrong, update faster
+  } else {
+    setTimeout(cacheTime, interval);
+  }
 }
 setTimeout(cacheTime, 5000);
