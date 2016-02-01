@@ -66,7 +66,7 @@ var expandItem = function(id){
 var topStoriesRef = hn.child('/topstories').limitToFirst(10);
 topStoriesRef.on('value', function(snapshot){
   var stories = snapshot.val();
-  cnosole.log('Top stories', stories);
+  console.log('Top stories', stories);
   handleCollection(stories, topStories);
   topStories = stories;
 });
