@@ -40,7 +40,7 @@ function formatStory(item){
   }
 
   // Identify type=ask
-  if (item.type == 'story' && output.url.match(/^item/i) && item.title.match(/^ask/i)){
+  if (item.type == 'story' && output.url.match(/^item/i) && item.title && item.title.match(/^ask/i)){
     output.type = 'ask';
   }
 
