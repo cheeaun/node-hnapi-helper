@@ -76,7 +76,7 @@ function formatStoryComments(item){
   if (item._parts && item._parts.length){
     output.poll = item._parts.map(function(part){
       return {
-        item: part.text,
+        item: part.title,
         points: part.score
       };
     });
