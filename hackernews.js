@@ -1,9 +1,12 @@
 // Mainly inspired by https://github.com/jsdf/hacker-news-mobile-api
 
-const Firebase = require('firebase');
+const firebase = require('firebase');
 const _ = require('lodash');
 
-const hn = new Firebase('https://hacker-news.firebaseio.com/v0');
+firebase.initializeApp({
+  databaseURL: 'https://hacker-news.firebaseio.com',
+});
+const hn = firebase.database().ref('/v0');
 const format = require('./format');
 
 var items = {};
