@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Helper for node-hnapi",
   "dependencies": {
-    "firebase": "~3.6.5",
+    "firebase": "~3.7.6",
     "hapi": "~16.1.0",
     "lodash": "~4.17.4",
     "memcached": "~2.2.1",
