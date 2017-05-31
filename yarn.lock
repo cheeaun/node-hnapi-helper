@@ -426,9 +426,9 @@ fill-range@^2.1.0:
     repeat-element "^1.1.2"
     repeat-string "^1.5.2"
 
-firebase@~4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.0.0.tgz#a128092910e44224babc33e19b562ae3716ec4d5"
+firebase@~4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.1.0.tgz#2fcabb7f84f552295f9f51fc38f1138eb85f39e2"
   dependencies:
     dom-storage "^2.0.2"
     faye-websocket "0.9.3"
@@ -567,9 +567,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-hapi@~16.2.0:
-  version "16.2.0"
-  resolved "https://registry.yarnpkg.com/hapi/-/hapi-16.2.0.tgz#de58fd1544f9af1928b6fa20462dcecc2d1d6ee2"
+hapi@~16.3.0:
+  version "16.3.0"
+  resolved "https://registry.yarnpkg.com/hapi/-/hapi-16.3.0.tgz#f6aa6d480b26eb2141d1ebf535e278c49e840bf0"
   dependencies:
     accept "2.x.x"
     ammo "2.x.x"
