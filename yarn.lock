@@ -426,9 +426,9 @@ fill-range@^2.1.0:
     repeat-element "^1.1.2"
     repeat-string "^1.5.2"
 
-firebase@~4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.1.0.tgz#2fcabb7f84f552295f9f51fc38f1138eb85f39e2"
+firebase@~4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.1.2.tgz#b213ab229eb65e31bdbd1d262059b1bb1edfac1f"
   dependencies:
     dom-storage "^2.0.2"
     faye-websocket "0.9.3"
@@ -567,9 +567,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-hapi@~16.3.0:
-  version "16.3.0"
-  resolved "https://registry.yarnpkg.com/hapi/-/hapi-16.3.0.tgz#f6aa6d480b26eb2141d1ebf535e278c49e840bf0"
+hapi@~16.4.3:
+  version "16.4.3"
+  resolved "https://registry.yarnpkg.com/hapi/-/hapi-16.4.3.tgz#be4daaf2dcdbee97957ce503061b09765078aa05"
   dependencies:
     accept "2.x.x"
     ammo "2.x.x"
@@ -584,10 +584,10 @@ hapi@~16.3.0:
     items "2.x.x"
     joi "10.x.x"
     mimos "3.x.x"
-    podium "^1.2.x"
+    podium "1.x.x"
     shot "3.x.x"
     statehood "5.x.x"
-    subtext "^4.3.x"
+    subtext "4.x.x"
     topo "2.x.x"
 
 har-validator@~2.0.6:
@@ -1238,7 +1238,7 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
 
-podium@^1.2.x:
+podium@1.x.x:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/podium/-/podium-1.2.5.tgz#87c566c2f0365bcf0a1ec7602c4d01948cdd2ad5"
   dependencies:
@@ -1519,15 +1519,15 @@ strip-json-comments@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-1.0.4.tgz#1e15fbcac97d3ee99bf2d73b4c656b082bbafb91"
 
-subtext@^4.3.x:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/subtext/-/subtext-4.3.0.tgz#dfac90492ec35669fd6e00c6e5d938b06d7ccfbb"
+subtext@4.x.x:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/subtext/-/subtext-4.4.1.tgz#2fcec945de429283c3d18b151ff0fa1f1b87aec9"
   dependencies:
-    boom "4.x.x"
+    boom "5.x.x"
     content "3.x.x"
     hoek "4.x.x"
     pez "2.x.x"
-    wreck "10.x.x"
+    wreck "12.x.x"
 
 supports-color@^0.2.0:
   version "0.2.0"
@@ -1673,11 +1673,11 @@ wrappy@1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
 
-wreck@10.x.x:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/wreck/-/wreck-10.0.0.tgz#98ab882f85e16a526332507f101f5a7841162278"
+wreck@12.x.x:
+  version "12.2.2"
+  resolved "https://registry.yarnpkg.com/wreck/-/wreck-12.2.2.tgz#e21823d34c36d672004eefa347ae8c4f6050e3db"
   dependencies:
-    boom "4.x.x"
+    boom "5.x.x"
     hoek "4.x.x"
 
 write-file-atomic@^1.1.2:
