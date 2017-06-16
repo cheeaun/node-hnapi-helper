@@ -74,6 +74,17 @@ server.route({
   }
 });
 
+// Experimental
+['newest', 'show', 'ask', 'jobs'].map(page => {
+  server.route({
+    method: 'GET',
+    path: '/' + page,
+    handler(request, reply){
+      return reply(hn[page]());
+    }
+  });
+});
+
 // Don't try this at home
 server.route({
   method: 'GET',
@@ -94,14 +105,13 @@ const expiry = nconf.get('cache:expiry');
 const now = () => new Date().toISOString();
 function cacheTime(){
   console.log(now() + ': Start caching');
-  const news = hn.news();
-  if (news.length) memcached.set('news', news, expiry, function(){
-    console.log(now() + ': Cache news');
-  });
 
-  const news2 = hn.news2();
-  if (news2.length) memcached.set('news2', news2, expiry, function(){
-    console.log(now() + ': Cache news2');
+  newsLengths = ['news', 'news2', 'newest', 'show', 'ask', 'jobs'].map(page => {
+    const news = hn[page]();
+    if (news.length) memcached.set(page, news, expiry, function(){
+      console.log(now() + ': Cache ' + page);
+    });
+    return news.length;
   });
 
   const items = hn.items();
@@ -112,7 +122,7 @@ function cacheTime(){
     });
   });
 
-  if (!news.length || !news2.length || !items.length){
+  if (newsLengths.some(length => length <= 0) || !items.length){
     setTimeout(cacheTime, 5000); // If something is wrong, update faster
   } else {
     setTimeout(cacheTime, interval);

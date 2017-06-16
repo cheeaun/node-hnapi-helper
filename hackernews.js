@@ -71,6 +71,39 @@ topStoriesRef.on('value', function(snapshot){
   topStories = stories;
 });
 
+// new, show, ask, jobs
+var newStories = [];
+var newStoriesRef = hn.child('/newstories').limitToFirst(30);
+newStoriesRef.on('value', function(snapshot){
+  var stories = snapshot.val();
+  handleCollection(stories, newStories);
+  newStories = stories;
+});
+
+var showStories = [];
+var showStoriesRef = hn.child('/showstories').limitToFirst(30);
+showStoriesRef.on('value', function(snapshot){
+  var stories = snapshot.val();
+  handleCollection(stories, showStories);
+  showStories = stories;
+});
+
+var askStories = [];
+var askStoriesRef = hn.child('/askstories').limitToFirst(30);
+askStoriesRef.on('value', function(snapshot){
+  var stories = snapshot.val();
+  handleCollection(stories, askStories);
+  askStories = stories;
+});
+
+var jobStories = [];
+var jobStoriesRef = hn.child('/jobstories').limitToFirst(30);
+jobStoriesRef.on('value', function(snapshot){
+  var stories = snapshot.val();
+  handleCollection(stories, jobStories);
+  jobStories = stories;
+});
+
 module.exports = {
   news(){
     var noItem = false;
@@ -92,16 +125,58 @@ module.exports = {
     if (noItem) return [];
     return data.map(format.story);
   },
+  newest(){
+    var noItem = false;
+    var data = newStories.slice(0, 30).map((id) => {
+      var item = items[id];
+      if (!item) noItem = true;
+      return item;
+    });
+    if (noItem) return [];
+    return data.map(format.story);
+  },
+  show(){
+    var noItem = false;
+    var data = showStories.slice(0, 30).map((id) => {
+      var item = items[id];
+      if (!item) noItem = true;
+      return item;
+    });
+    if (noItem) return [];
+    return data.map(format.story);
+  },
+  ask(){
+    var noItem = false;
+    var data = askStories.slice(0, 30).map((id) => {
+      var item = items[id];
+      if (!item) noItem = true;
+      return item;
+    });
+    if (noItem) return [];
+    return data.map(format.story);
+  },
+  jobs(){
+    var noItem = false;
+    var data = jobStories.slice(0, 30).map((id) => {
+      var item = items[id];
+      if (!item) noItem = true;
+      return item;
+    });
+    if (noItem) return [];
+    return data.map(format.story);
+  },
   item(id){
     return format.storyComments(expandItem(id));
   },
   items(){
-    var noItem = false;
-    topStories.forEach((id) => {
-      var item = items[id];
-      if (!item) noItem = true;
-    });
-    if (noItem) return [];
-    return topStories.map(expandItem).map(format.storyComments);
+    const allStories = [
+      topStories,
+      newStories,
+      showStories,
+      askStories,
+      jobStories,
+    ].reduce((a, b) => a.concat(b), []); // flatten
+    const reducedStories = [...new Set(allStories)]; // remove duplicates
+    return reducedStories.filter(id => !!items[id]).map(expandItem).map(format.storyComments);
   }
 };
