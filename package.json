@@ -6,8 +6,8 @@
     "node": "stable"
   },
   "dependencies": {
-    "firebase": "~4.1.0",
-    "hapi": "~16.3.0",
+    "firebase": "~4.1.2",
+    "hapi": "~16.4.3",
     "lodash": "~4.17.4",
     "memcached": "~2.2.2",
     "moment": "~2.18.1",
