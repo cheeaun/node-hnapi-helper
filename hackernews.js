@@ -1,7 +1,7 @@
 // Mainly inspired by https://github.com/jsdf/hacker-news-mobile-api
 
 const firebase = require('firebase');
-const _ = require('lodash');
+const difference = require('lodash.difference');
 
 firebase.initializeApp({
   databaseURL: 'https://hacker-news.firebaseio.com',
@@ -13,8 +13,8 @@ var items = {};
 var itemRefs = {};
 
 var handleCollection = function(itemIds, prevItemIds){
-  var added = _.difference(itemIds, prevItemIds);
-  var removed = _.difference(prevItemIds, itemIds);
+  var added = difference(itemIds, prevItemIds);
+  var removed = difference(prevItemIds, itemIds);
   added.forEach(addItem);
   removed.forEach(removeItem);
 };
