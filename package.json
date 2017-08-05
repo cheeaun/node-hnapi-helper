@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "Helper for node-hnapi",
   "engines": {
-    "node": "stable"
+    "node": ">=8.x"
   },
   "dependencies": {
     "firebase": "~4.2.0",
