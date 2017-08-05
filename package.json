@@ -15,7 +15,7 @@
     "nconf": "~0.8.4"
   },
   "scripts": {
-    "start": "micro",
+    "start": "micro -p ${PORT:-3000}",
     "dev": "micro-dev --cold"
   },
   "author": "Lim Chee Aun",
