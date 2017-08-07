@@ -245,9 +245,17 @@ chalk@1.1.3, chalk@^1.0.0, chalk@^1.1.1, chalk@^1.1.3:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-chalk@2.0.1, chalk@^2.0.1:
+chalk@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.0.1.tgz#dbec49436d2ae15f536114e76d14656cdbc0f44d"
+  dependencies:
+    ansi-styles "^3.1.0"
+    escape-string-regexp "^1.0.5"
+    supports-color "^4.0.0"
+
+chalk@^2.0.1:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.1.0.tgz#ac5becf14fa21b99c6c92ca7a7d7cfd5b17e743e"
   dependencies:
     ansi-styles "^3.1.0"
     escape-string-regexp "^1.0.5"
@@ -766,7 +774,7 @@ hawk@~3.1.3:
     hoek "2.x.x"
     sntp "1.x.x"
 
-he@^1.1.1:
+he@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/he/-/he-1.1.1.tgz#93410fd21b009735151f8868c2f271f3427e23fd"
 
@@ -1135,8 +1143,8 @@ memcached@~2.2.2:
     jackpot ">=0.0.6"
 
 micro-dev@~1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/micro-dev/-/micro-dev-1.1.1.tgz#67361bb509356e54cce7f562f02ad056dc2f5dd5"
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/micro-dev/-/micro-dev-1.1.2.tgz#2699b7c53f5df928314538249a80f7f539ad16d2"
   dependencies:
     boxen "1.2.1"
     chalk "2.0.1"
