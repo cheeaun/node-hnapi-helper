@@ -51,7 +51,7 @@ function formatStory(item){
 function formatStoryComments(item){
   var output = {
     id: item.id,
-    title: item.title,
+    title: he.decode(item.title),
     points: item.score,
     user: item.by,
     time: item.time, // Unix timestamp
