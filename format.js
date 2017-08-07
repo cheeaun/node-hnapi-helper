@@ -1,5 +1,6 @@
 const moment = require('moment');
 const url = require('url');
+const he = require('he');
 
 const typeMapping = {
   story: 'link'
@@ -18,7 +19,7 @@ function formatStory(item){
 
   var output = {
     id: item.id,
-    title: item.title,
+    title: he.decode(item.title),
     points: item.score,
     user: item.by,
     time: item.time, // Unix timestamp
