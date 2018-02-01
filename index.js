@@ -1,22 +1,15 @@
-const nconf = require('nconf');
+require('dotenv').config();
 const { send } = require('micro');
 const { router, get } = require('microrouter');
 const hn = require('./hackernews');
 const Memcached = require('memcached');
 
-nconf.argv()
-  .env()
-  .file('config.json')
-  .defaults({
-    cache: {
-      expiry: 60*10, // 10 minutes
-      interval: 1000*60*5, // 5 minutes
-    }
-  });
+const CACHE_INTERVAL = process.env.CACHE_INTERVAL = 1000*60*5; // 5 minutes
+const CACHE_EXPIRY = process.env.CACHE_EXPIRY = 60*10; // 10 minutes
 
-const cache = nconf.get('cache');
-console.log(cache);
-const memcached = new Memcached(cache.location, cache.options);
+const memcached = new Memcached(process.env.CACHE_URL, {
+  debug: process.env.CACHE_DEBUG || false,
+});
 
 memcached.on('issue', (details) => console.log('ISSUE', details));
 memcached.on('failure', (details) => console.log('FAILURE', details));
@@ -57,15 +50,13 @@ module.exports = router(
 );
 
 // Caching time!
-const interval = nconf.get('cache:interval');
-const expiry = nconf.get('cache:expiry');
 const now = () => new Date().toISOString();
 function cacheTime(){
   console.log(now() + ': Start caching');
 
   newsLengths = ['news', 'news2', 'newest', 'show', 'ask'/*, 'jobs'*/].map(page => {
     const news = hn[page]();
-    if (news.length) memcached.set(page, news, expiry, function(){
+    if (news.length) memcached.set(page, news, CACHE_EXPIRY, function(){
       console.log(now() + ': Cache ' + page);
     });
     return news.length;
@@ -74,7 +65,7 @@ function cacheTime(){
   const items = hn.items();
   if (items.length) items.forEach(function(item){
     const id = item.id;
-    if (id) memcached.set('post' + id, item, expiry, function(){
+    if (id) memcached.set('post' + id, item, CACHE_EXPIRY, function(){
       console.log(now() + ': Cache item ' + id);
     });
   });
@@ -82,7 +73,7 @@ function cacheTime(){
   if (newsLengths.some(length => length <= 0) || !items.length){
     setTimeout(cacheTime, 5000); // If something is wrong, update faster
   } else {
-    setTimeout(cacheTime, interval);
+    setTimeout(cacheTime, CACHE_INTERVAL);
   }
 }
 setTimeout(cacheTime, 5000);
