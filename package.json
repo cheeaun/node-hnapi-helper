@@ -6,7 +6,8 @@
     "node": ">=8.x"
   },
   "dependencies": {
-    "firebase": "~4.9.0",
+    "@firebase/app": "~0.1.7",
+    "@firebase/database": "~0.1.8",
     "he": "~1.1.1",
     "lodash.difference": "~4.5.0",
     "memcached": "~2.2.2",

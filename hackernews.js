@@ -1,6 +1,7 @@
 // Mainly inspired by https://github.com/jsdf/hacker-news-mobile-api
 
-const firebase = require('firebase');
+const firebase = require('@firebase/app').default;
+require('@firebase/database');
 const difference = require('lodash.difference');
 
 firebase.initializeApp({
