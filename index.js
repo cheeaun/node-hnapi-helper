@@ -14,7 +14,15 @@ nconf.argv()
     }
   });
 
-const memcached = new Memcached(nconf.get('cache:location'), nconf.get('cache:options'));
+const cache = nconf.get('cache');
+console.log(cache);
+const memcached = new Memcached(cache.location, cache.options);
+
+memcached.on('issue', (details) => console.log('ISSUE', details));
+memcached.on('failure', (details) => console.log('FAILURE', details));
+memcached.on('reconnecting', (details) => console.log('RECONNECTING', details));
+memcached.on('reconnect', (details) => console.log('RECONNECT', details));
+memcached.on('remove', (details) => console.log('REMOVE', details));
 
 module.exports = router(
   get('/', () => {
