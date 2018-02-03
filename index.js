@@ -75,7 +75,8 @@ function cacheTime(){
     'jobs',
   ].map(page => {
     const news = hn[page]();
-    if (news.length && CACHE_URL) memcached.set(page, news, CACHE_EXPIRY, function(){
+    if (news.length && CACHE_URL) memcached.set(page, news, CACHE_EXPIRY, function(e){
+      if (e) console.error(page, e);
       console.log(now() + ': Cache ' + page);
     });
     return {
@@ -89,7 +90,7 @@ function cacheTime(){
     items.forEach(function(item){
       const id = item.id;
       if (id) memcached.set('post' + id, item, CACHE_EXPIRY, function(e){
-        if (e) console.error(e);
+        if (e) console.error(id, e);
       });
     });
   }
