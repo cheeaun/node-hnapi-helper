@@ -19,12 +19,15 @@ memcached.on('remove', (details) => console.log('REMOVE', details));
 
 module.exports = router(
   get('/', () => {
+    const memoryUsage = process.memoryUsage();
+    const used = memoryUsage.heapUsed / 1024 / 1024;
     return {
       name: 'node-hnapi-helper',
       process: {
         versions: process.versions,
-        memoryUsage: process.memoryUsage()
-      }
+        memoryUsageReadable: `${Math.round(used * 100) / 100} MB`,
+        memoryUsage,
+      },
     };
   }),
   get('/news', hn.news),
