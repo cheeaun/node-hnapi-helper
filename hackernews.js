@@ -10,6 +10,7 @@ firebase.initializeApp({
 const hn = firebase.database().ref('/v0');
 const format = require('./format');
 
+const { DEBUG } = process.env;
 const items = {};
 const itemRefs = {};
 
@@ -20,9 +21,12 @@ const handleCollection = (itemIds, prevItemIds) => {
   removed.forEach(removeItem);
 };
 
-const handleItem = (snapshot) => {
+const handleItem = (snapshot, itemID) => {
   const item = snapshot.val();
-  if (!item || !item.id) return;
+  if (!item || !item.id){
+    if (DEBUG) console.log('HANDLEITEM FAIL', itemID);
+    return;
+  }
   const { id } = item;
   const prevItem = items[id];
   items[id] = item;
@@ -39,14 +43,16 @@ const handleItem = (snapshot) => {
 const addItem = (id) => {
   if (itemRefs[id] && items[id]) return;
   const itemRef = hn.child('/item/' + id);
-  itemRef.on('value', handleItem);
+  itemRef.on('value', (snapshot) => {
+    handleItem(snapshot, id);
+  });
   itemRefs[id] = itemRef;
 };
 
 const removeItem = (id) => {
   const itemRef = itemRefs[id];
   if (!itemRef) return;
-  itemRef.off('value', handleItem);
+  itemRef.off('value');
   delete itemRefs[id];
   delete items[id];
 };
