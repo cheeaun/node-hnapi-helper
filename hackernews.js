@@ -10,7 +10,6 @@ firebase.initializeApp({
 const hn = firebase.database().ref('/v0');
 const format = require('./format');
 
-const { DEBUG } = process.env;
 const items = {};
 const itemRefs = {};
 
@@ -24,7 +23,7 @@ const handleCollection = (itemIds, prevItemIds) => {
 const handleItem = (snapshot, itemID) => {
   const item = snapshot.val();
   if (!item || !item.id){
-    if (DEBUG) console.log('HANDLEITEM FAIL', itemID);
+    console.log('Null item', itemID);
     return;
   }
   const { id } = item;
