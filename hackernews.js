@@ -194,12 +194,12 @@ module.exports = {
   },
   items(){
     const allStories = [
-      topStories,
-      newStories,
-      showStories,
-      askStories,
-      jobStories,
-    ].reduce((a, b) => a.concat(b), []); // flatten
+      ...topStories,
+      ...newStories,
+      ...showStories,
+      ...askStories,
+      ...jobStories,
+    ];
     const reducedStories = [...new Set(allStories)]; // remove duplicates
     return reducedStories.filter(id => !!items[id]).map(expandItem).map(format.storyComments);
   }
