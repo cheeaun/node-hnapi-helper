@@ -98,12 +98,12 @@ askStoriesRef.on('value', function(snapshot){
 });
 
 var jobStories = [];
-// var jobStoriesRef = hn.child('/jobstories').limitToFirst(30);
-// jobStoriesRef.on('value', function(snapshot){
-//   var stories = snapshot.val();
-//   handleCollection(stories, jobStories);
-//   jobStories = stories;
-// });
+var jobStoriesRef = hn.child('/jobstories').limitToFirst(30);
+jobStoriesRef.on('value', function(snapshot){
+  var stories = snapshot.val();
+  handleCollection(stories, jobStories);
+  jobStories = stories;
+});
 
 module.exports = {
   news(){

@@ -57,7 +57,14 @@ const now = () => new Date().toISOString();
 function cacheTime(){
   console.log(now() + ': Start caching');
 
-  newsLengths = ['news', 'news2', 'newest', 'show', 'ask'/*, 'jobs'*/].map(page => {
+  newsLengths = [
+    'news',
+    'news2',
+    'newest',
+    'show',
+    'ask',
+    'jobs',
+  ].map(page => {
     const news = hn[page]();
     if (news.length) memcached.set(page, news, CACHE_EXPIRY, function(){
       console.log(now() + ': Cache ' + page);
