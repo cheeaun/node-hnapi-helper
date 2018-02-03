@@ -110,7 +110,10 @@ module.exports = {
     var noItem = false;
     var data = topStories.slice(0, 30).map((id) => {
       var item = items[id];
-      if (!item) noItem = true;
+      if (!item){
+        noItem = true;
+        console.error('No ID', item);
+      }
       return item;
     });
     if (noItem) return [];
@@ -120,7 +123,10 @@ module.exports = {
     var noItem = false;
     var data = topStories.slice(30).map((id) => {
       var item = items[id];
-      if (!item) noItem = true;
+      if (!item){
+        noItem = true;
+        console.error('No ID', item);
+      }
       return item;
     });
     if (noItem) return [];
@@ -130,7 +136,10 @@ module.exports = {
     var noItem = false;
     var data = newStories.slice(0, 30).map((id) => {
       var item = items[id];
-      if (!item) noItem = true;
+      if (!item){
+        noItem = true;
+        console.error('No ID', item);
+      }
       return item;
     });
     if (noItem) return [];
@@ -140,7 +149,10 @@ module.exports = {
     var noItem = false;
     var data = showStories.slice(0, 30).map((id) => {
       var item = items[id];
-      if (!item) noItem = true;
+      if (!item){
+        noItem = true;
+        console.error('No ID', item);
+      }
       return item;
     });
     if (noItem) return [];
@@ -150,7 +162,10 @@ module.exports = {
     var noItem = false;
     var data = askStories.slice(0, 30).map((id) => {
       var item = items[id];
-      if (!item) noItem = true;
+      if (!item){
+        noItem = true;
+        console.error('No ID', item);
+      }
       return item;
     });
     if (noItem) return [];
@@ -160,7 +175,10 @@ module.exports = {
     var noItem = false;
     var data = jobStories.slice(0, 30).map((id) => {
       var item = items[id];
-      if (!item) noItem = true;
+      if (!item){
+        noItem = true;
+        console.error('No ID', item);
+      }
       return item;
     });
     if (noItem) return [];
