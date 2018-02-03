@@ -11,11 +11,12 @@ const {
   CACHE_DEBUG = false,
 } = process.env;
 
-const redis = new Redis(`redis://${CACHE_URL}`);
-
-redis.on('connect', () => console.log('CONNECT'));
-redis.on('reconnecting', () => console.log('RECONNECTING'));
-redis.on('error', (e) => console.error('ERROR', e));
+if (CACHE_URL){
+  const redis = new Redis(`redis://${CACHE_URL}`);
+  redis.on('connect', () => console.log('CONNECT'));
+  redis.on('reconnecting', () => console.log('RECONNECTING'));
+  redis.on('error', (e) => console.error('ERROR', e));
+}
 
 module.exports = router(
   get('/', () => {
@@ -55,7 +56,8 @@ let items = [];
 function cacheTime(){
   console.log(now() + ': Start caching');
 
-  const pipeline = redis.pipeline();
+  const pipeline = CACHE_URL ? redis.pipeline() : { exec: _=>_ };
+
   newsLengths = [
     'news',
     'news2',
