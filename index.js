@@ -11,8 +11,9 @@ const {
   CACHE_DEBUG = false,
 } = process.env;
 
+let redis;
 if (CACHE_URL){
-  const redis = new Redis(`redis://${CACHE_URL}`);
+  redis = new Redis(`redis://${CACHE_URL}`);
   redis.on('connect', () => console.log('CONNECT'));
   redis.on('reconnecting', () => console.log('RECONNECTING'));
   redis.on('error', (e) => console.error('ERROR', e));
