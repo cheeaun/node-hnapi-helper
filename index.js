@@ -2,7 +2,7 @@ require('dotenv').config();
 const { send } = require('micro');
 const { router, get } = require('microrouter');
 const hn = require('./hackernews');
-const Memcached = require('memcached');
+const Redis = require('ioredis');
 
 const {
   CACHE_INTERVAL = 1000*60*5, // 5 minutes
@@ -11,15 +11,11 @@ const {
   CACHE_DEBUG = false,
 } = process.env;
 
-const memcached = new Memcached(CACHE_URL, {
-  debug: CACHE_DEBUG,
-});
+const redis = new Redis(`redis://${CACHE_URL}`);
 
-memcached.on('issue', (details) => console.log('ISSUE', details));
-memcached.on('failure', (details) => console.log('FAILURE', details));
-memcached.on('reconnecting', (details) => console.log('RECONNECTING', details));
-memcached.on('reconnect', (details) => console.log('RECONNECT', details));
-memcached.on('remove', (details) => console.log('REMOVE', details));
+redis.on('connect', () => console.log('CONNECT'));
+redis.on('reconnecting', () => console.log('RECONNECTING'));
+redis.on('error', (e) => console.error('ERROR', e));
 
 module.exports = router(
   get('/', () => {
@@ -46,15 +42,8 @@ module.exports = router(
   get('/show', hn.show),
   get('/ask', hn.ask),
   get('/jobs', hn.jobs),
-  get('/cache/:key', async (req, res) => {
-    const { key } = req.params;
-    return await new Promise((resolve, reject) => {
-      memcached.get(key, function(err, data){
-        if (err) reject(err);
-        resolve(data);
-      });
-    });
-  }),
+  get('/cache', async () => await redis.keys('*')),
+  get('/cache/:key', async (req) => await redis.get(req.params.key)),
   get('/everything', hn.items),
 );
 
@@ -66,6 +55,7 @@ let items = [];
 function cacheTime(){
   console.log(now() + ': Start caching');
 
+  const pipeline = redis.pipeline();
   newsLengths = [
     'news',
     'news2',
@@ -75,10 +65,9 @@ function cacheTime(){
     'jobs',
   ].map(page => {
     const news = hn[page]();
-    if (news.length && CACHE_URL) memcached.set(page, news, CACHE_EXPIRY, function(e){
-      if (e) console.error(page, e);
-      console.log(now() + ': Cache ' + page);
-    });
+    if (news.length && CACHE_URL){
+      pipeline.set(page, JSON.stringify(news), 'ex', CACHE_EXPIRY);
+    }
     return {
       page,
       length: news.length,
@@ -89,11 +78,13 @@ function cacheTime(){
   if (items.length && CACHE_URL){
     items.forEach(function(item){
       const id = item.id;
-      if (id) memcached.set('post' + id, item, CACHE_EXPIRY, function(e){
-        if (e) console.error(id, e);
-      });
+      if (id) pipeline.set(`post${id}`, JSON.stringify(item), 'ex', CACHE_EXPIRY);
     });
   }
+
+  pipeline.exec((e) => {
+    if (e) console.error(e);
+  });
 
   const zeroLengthNews = newsLengths.filter(({length}) => length <= 0);
   if (zeroLengthNews.length || !items.length){

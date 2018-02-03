@@ -1,6 +1,6 @@
 {
   "name": "node-hnapi-helper",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Helper for node-hnapi",
   "engines": {
     "node": ">=8.x"
@@ -8,10 +8,10 @@
   "dependencies": {
     "@firebase/app": "~0.1.7",
     "@firebase/database": "~0.1.8",
-    "dotenv": "^5.0.0",
+    "dotenv": "~5.0.0",
     "he": "~1.1.1",
+    "ioredis": "~3.2.2",
     "lodash.difference": "~4.5.0",
-    "memcached": "~2.2.2",
     "micro": "~9.1.0",
     "microrouter": "~3.0.0",
     "moment": "~2.20.1"
