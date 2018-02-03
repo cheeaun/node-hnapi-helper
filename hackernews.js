@@ -40,7 +40,7 @@ const handleItem = (snapshot, itemID) => {
 };
 
 const addItem = (id) => {
-  if (itemRefs[id] && items[id]) return;
+  if (itemRefs[id]) return;
   const itemRef = hn.child('/item/' + id);
   itemRef.on('value', (snapshot) => {
     handleItem(snapshot, id);
@@ -51,6 +51,14 @@ const addItem = (id) => {
 const removeItem = (id) => {
   const itemRef = itemRefs[id];
   if (!itemRef) return;
+  const allStories = [
+    ...topStories,
+    ...newStories,
+    ...showStories,
+    ...askStories,
+    ...jobStories,
+  ];
+  if (allStories.includes(id)) return;
   itemRef.off('value');
   delete itemRefs[id];
   delete items[id];
