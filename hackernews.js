@@ -37,7 +37,7 @@ const handleItem = (snapshot) => {
 };
 
 const addItem = (id) => {
-  if (itemRefs[id]) return;
+  if (itemRefs[id] && items[id]) return;
   const itemRef = hn.child('/item/' + id);
   itemRef.on('value', handleItem);
   itemRefs[id] = itemRef;
