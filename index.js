@@ -4,11 +4,15 @@ const { router, get } = require('microrouter');
 const hn = require('./hackernews');
 const Memcached = require('memcached');
 
-const CACHE_INTERVAL = process.env.CACHE_INTERVAL = 1000*60*5; // 5 minutes
-const CACHE_EXPIRY = process.env.CACHE_EXPIRY = 60*10; // 10 minutes
+const {
+  CACHE_INTERVAL = 1000*60*5, // 5 minutes
+  CACHE_EXPIRY = 60*10, // 10 minutes
+  CACHE_URL,
+  CACHE_DEBUG = false,
+} = process.env;
 
-const memcached = new Memcached(process.env.CACHE_URL, {
-  debug: process.env.CACHE_DEBUG || false,
+const memcached = new Memcached(CACHE_URL, {
+  debug: CACHE_DEBUG,
 });
 
 memcached.on('issue', (details) => console.log('ISSUE', details));
@@ -28,6 +32,8 @@ module.exports = router(
         memoryUsageReadable: `${Math.round(used * 100) / 100} MB`,
         memoryUsage,
       },
+      newsLengths,
+      items: items.map(({id = null}) => id),
     };
   }),
   get('/news', hn.news),
@@ -54,6 +60,9 @@ module.exports = router(
 
 // Caching time!
 const now = () => new Date().toISOString();
+let newsLengths = [];
+let items = [];
+
 function cacheTime(){
   console.log(now() + ': Start caching');
 
@@ -66,21 +75,27 @@ function cacheTime(){
     'jobs',
   ].map(page => {
     const news = hn[page]();
-    if (news.length) memcached.set(page, news, CACHE_EXPIRY, function(){
+    if (news.length && CACHE_URL) memcached.set(page, news, CACHE_EXPIRY, function(){
       console.log(now() + ': Cache ' + page);
     });
-    return news.length;
+    return {
+      page,
+      length: news.length,
+    };
   });
 
-  const items = hn.items();
-  if (items.length) items.forEach(function(item){
-    const id = item.id;
-    if (id) memcached.set('post' + id, item, CACHE_EXPIRY, function(){
-      console.log(now() + ': Cache item ' + id);
+  items = hn.items();
+  if (items.length && CACHE_URL){
+    items.forEach(function(item){
+      const id = item.id;
+      if (id) memcached.set('post' + id, item, CACHE_EXPIRY, function(e){
+        if (e) console.error(e);
+      });
     });
-  });
+  }
 
-  if (newsLengths.some(length => length <= 0) || !items.length){
+  const zeroLengthNews = newsLengths.filter(({length}) => length <= 0);
+  if (zeroLengthNews.length || !items.length){
     setTimeout(cacheTime, 5000); // If something is wrong, update faster
   } else {
     setTimeout(cacheTime, CACHE_INTERVAL);
