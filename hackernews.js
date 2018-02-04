@@ -57,6 +57,7 @@ const removeItem = (id) => {
     ...showStories,
     ...askStories,
     ...jobStories,
+    ...bestStories,
   ];
   if (allStories.includes(id)) return;
   itemRef.off('value');
@@ -87,7 +88,7 @@ topStoriesRef.on('value', (snapshot) => {
 
 // new, show, ask, jobs
 let newStories = [];
-const newStoriesRef = hn.child('/newstories').limitToFirst(30);
+const newStoriesRef = hn.child('/newstories').limitToFirst(60);
 newStoriesRef.on('value', (snapshot) => {
   const stories = snapshot.val();
   handleCollection(stories, newStories);
@@ -95,7 +96,7 @@ newStoriesRef.on('value', (snapshot) => {
 });
 
 let showStories = [];
-const showStoriesRef = hn.child('/showstories').limitToFirst(30);
+const showStoriesRef = hn.child('/showstories').limitToFirst(60);
 showStoriesRef.on('value', (snapshot) => {
   const stories = snapshot.val();
   handleCollection(stories, showStories);
@@ -103,7 +104,7 @@ showStoriesRef.on('value', (snapshot) => {
 });
 
 let askStories = [];
-const askStoriesRef = hn.child('/askstories').limitToFirst(30);
+const askStoriesRef = hn.child('/askstories').limitToFirst(60);
 askStoriesRef.on('value', (snapshot) => {
   const stories = snapshot.val();
   handleCollection(stories, askStories);
@@ -111,17 +112,38 @@ askStoriesRef.on('value', (snapshot) => {
 });
 
 let jobStories = [];
-const jobStoriesRef = hn.child('/jobstories').limitToFirst(30);
+const jobStoriesRef = hn.child('/jobstories').limitToFirst(60);
 jobStoriesRef.on('value', (snapshot) => {
   const stories = snapshot.val();
   handleCollection(stories, jobStories);
   jobStories = stories;
 });
 
+let bestStories = [];
+const bestStoriesRef = hn.child('/beststories').limitToFirst(60);
+bestStoriesRef.on('value', (snapshot) => {
+  const stories = snapshot.val();
+  handleCollection(stories, bestStories);
+  bestStories = stories;
+});
+
+const keyMap = {
+  news: () => topStories,
+  newest: () => newStories,
+  show: () => showStories,
+  ask: () => askStories,
+  jobs: () => jobStories,
+  best: () => bestStories,
+};
+const perPage = 30;
+
 module.exports = {
-  news(){
+  stories(key, page = 1){
     let noItem = false;
-    const data = topStories.slice(0, 30).map((id) => {
+    const begin = (page-1) * perPage;
+    const end = begin + perPage;
+    const stories = keyMap[key]();
+    const data = stories.slice(begin, end).map((id) => {
       const item = items[id];
       if (!item){
         noItem = true;
@@ -131,71 +153,27 @@ module.exports = {
     });
     if (noItem) return [];
     return data.map(format.story);
+  },
+  news(){
+    return this.stories('news');
   },
   news2(){
-    let noItem = false;
-    const data = topStories.slice(30).map((id) => {
-      const item = items[id];
-      if (!item){
-        noItem = true;
-        console.error('No item', id);
-      }
-      return item;
-    });
-    if (noItem) return [];
-    return data.map(format.story);
+    return this.stories('news', 2);
   },
   newest(){
-    let noItem = false;
-    const data = newStories.slice(0, 30).map((id) => {
-      const item = items[id];
-      if (!item){
-        noItem = true;
-        console.error('No item', id);
-      }
-      return item;
-    });
-    if (noItem) return [];
-    return data.map(format.story);
+    return this.stories('newest');
   },
   show(){
-    let noItem = false;
-    const data = showStories.slice(0, 30).map((id) => {
-      const item = items[id];
-      if (!item){
-        noItem = true;
-        console.error('No item', id);
-      }
-      return item;
-    });
-    if (noItem) return [];
-    return data.map(format.story);
+    return this.stories('show');
   },
   ask(){
-    let noItem = false;
-    const data = askStories.slice(0, 30).map((id) => {
-      const item = items[id];
-      if (!item){
-        noItem = true;
-        console.error('No item', id);
-      }
-      return item;
-    });
-    if (noItem) return [];
-    return data.map(format.story);
+    return this.stories('ask');
   },
   jobs(){
-    let noItem = false;
-    const data = jobStories.slice(0, 30).map((id) => {
-      const item = items[id];
-      if (!item){
-        noItem = true;
-        console.error('No item', id);
-      }
-      return item;
-    });
-    if (noItem) return [];
-    return data.map(format.story);
+    return this.stories('jobs');
+  },
+  best(){
+    return this.stories('best');
   },
   item(id){
     return format.storyComments(expandItem(id));
@@ -207,6 +185,7 @@ module.exports = {
       ...showStories,
       ...askStories,
       ...jobStories,
+      ...bestStories,
     ];
     const reducedStories = [...new Set(allStories)]; // remove duplicates
     return reducedStories.filter(id => !!items[id]).map(expandItem).map(format.storyComments);

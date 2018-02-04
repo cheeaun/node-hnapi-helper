@@ -44,6 +44,7 @@ module.exports = router(
   get('/show', hn.show),
   get('/ask', hn.ask),
   get('/jobs', hn.jobs),
+  get('/best', hn.best),
   get('/cache', async () => await redis.keys('*')),
   get('/cache/:key', async (req) => await redis.get(req.params.key)),
   get('/everything', hn.items),
@@ -61,19 +62,23 @@ function cacheTime(){
 
   newsLengths = [
     'news',
-    'news2',
     'newest',
     'show',
     'ask',
     'jobs',
+    'best',
   ].map(page => {
-    const news = hn[page]();
+    const news = hn.stories(page);
     if (news.length && CACHE_URL){
       pipeline.set(page, JSON.stringify(news), 'ex', CACHE_EXPIRY);
     }
+    const news2 = hn.stories(page, 2);
+    if (news2.length && CACHE_URL){
+      pipeline.set(page+2, JSON.stringify(news2), 'ex', CACHE_EXPIRY);
+    }
     return {
       page,
-      length: news.length,
+      length: news.length + news2.length,
     };
   });
 
