@@ -137,43 +137,45 @@ const keyMap = {
 };
 const perPage = 30;
 
+const stories = (key, page = 1) => {
+  let noItem = false;
+  const begin = (page-1) * perPage;
+  const end = begin + perPage;
+  const stories = keyMap[key]();
+  const data = stories.slice(begin, end).map((id) => {
+    const item = items[id];
+    if (!item){
+      noItem = true;
+      console.error('No item', id);
+    }
+    return item;
+  });
+  if (noItem) return [];
+  return data.map(format.story);
+};
+
 module.exports = {
-  stories(key, page = 1){
-    let noItem = false;
-    const begin = (page-1) * perPage;
-    const end = begin + perPage;
-    const stories = keyMap[key]();
-    const data = stories.slice(begin, end).map((id) => {
-      const item = items[id];
-      if (!item){
-        noItem = true;
-        console.error('No item', id);
-      }
-      return item;
-    });
-    if (noItem) return [];
-    return data.map(format.story);
-  },
+  stories,
   news(){
-    return this.stories('news');
+    return stories('news');
   },
   news2(){
-    return this.stories('news', 2);
+    return stories('news', 2);
   },
   newest(){
-    return this.stories('newest');
+    return stories('newest');
   },
   show(){
-    return this.stories('show');
+    return stories('show');
   },
   ask(){
-    return this.stories('ask');
+    return stories('ask');
   },
   jobs(){
-    return this.stories('jobs');
+    return stories('jobs');
   },
   best(){
-    return this.stories('best');
+    return stories('best');
   },
   item(id){
     return format.storyComments(expandItem(id));
