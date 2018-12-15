@@ -1,20 +1,20 @@
 {
   "name": "node-hnapi-helper",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Helper for node-hnapi",
   "engines": {
     "node": ">=8.x"
   },
   "dependencies": {
-    "@firebase/app": "~0.1.7",
-    "@firebase/database": "~0.1.8",
-    "dotenv": "~5.0.0",
-    "he": "~1.1.1",
-    "ioredis": "~3.2.2",
+    "@firebase/app": "~0.3.5",
+    "@firebase/database": "~0.3.7",
+    "dotenv": "~6.2.0",
+    "he": "~1.2.0",
+    "ioredis": "~4.3.0",
     "lodash.difference": "~4.5.0",
-    "micro": "~9.1.0",
-    "microrouter": "~3.0.0",
-    "moment": "~2.20.1"
+    "micro": "~9.3.3",
+    "microrouter": "~3.1.3",
+    "moment": "~2.23.0"
   },
   "scripts": {
     "start": "micro -p ${PORT:-3000}",
@@ -23,6 +23,6 @@
   "author": "Lim Chee Aun",
   "license": "ISC",
   "devDependencies": {
-    "micro-dev": "~2.2.0"
+    "micro-dev": "~3.0.0"
   }
 }
