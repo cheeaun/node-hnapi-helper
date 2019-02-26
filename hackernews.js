@@ -190,6 +190,6 @@ module.exports = {
       ...bestStories,
     ];
     const reducedStories = [...new Set(allStories)]; // remove duplicates
-    return reducedStories.filter(id => !!items[id]).map(expandItem).map(format.storyComments);
+    return reducedStories.filter(id => !!items[id]).map(expandItem).filter(Boolean).map(format.storyComments);
   }
 };
