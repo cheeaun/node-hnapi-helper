@@ -10,7 +10,7 @@
     "@firebase/database": "~0.8.3",
     "dotenv": "~8.2.0",
     "he": "~1.2.0",
-    "ioredis": "~4.19.4",
+    "ioredis": "~4.27.8",
     "lodash.difference": "~4.5.0",
     "micro": "~9.3.4",
     "microrouter": "~3.1.3",
